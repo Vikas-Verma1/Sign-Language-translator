@@ -1,37 +1,25 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
 
-// Enable CORS so your frontend can communicate with this backend
 app.use(cors({
-  origin: '*', // You can restrict this to your frontend Render URL later if desired
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Parse JSON request bodies
 app.use(express.json());
 
-// Health check route for Render testing
 app.get('/', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Sign Language Translator Backend is running!' });
 });
 
-// --- ADD YOUR API ROUTES BELOW ---
-// Example:
-// app.post('/api/translate', (req, res) => {
-//   ...
-// });
-
-
-// Dynamic port binding for Render deployment
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running and listening on port ${PORT}`);
 });
-
 
 
 
