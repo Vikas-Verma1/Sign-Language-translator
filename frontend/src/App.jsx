@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import React, { useState, useEffect } from 'react';
 import SpeechInput from './components/SpeechInput';
 import AvatarCanvas from './components/AvatarCanvas';
@@ -8,17 +9,13 @@ export default function App() {
   const [glossQueue, setGlossQueue] = useState([]);
   const [activeGloss, setActiveGloss] = useState('');
 
-  // Speaks the name of the current gesture whenever activeGloss changes
+  /* ===================== CORE LOGIC — UNCHANGED ===================== */
   useEffect(() => {
     if (activeGloss && activeGloss !== 'REST' && 'speechSynthesis' in window) {
-      // Cancel any ongoing speech so previous words don't overlap
       window.speechSynthesis.cancel();
-
-      // Convert gloss token (e.g., "HELLO") to lower case for natural pronunciation
       const utterance = new SpeechSynthesisUtterance(activeGloss.toLowerCase());
-      utterance.rate = 1.0;  // Speed of voice playback
-      utterance.pitch = 1.0; // Normal voice pitch
-
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
       window.speechSynthesis.speak(utterance);
     }
   }, [activeGloss]);
@@ -27,111 +24,65 @@ export default function App() {
     setTranscript(text);
     const glosses = await processSpeechToGloss(text);
     setGlossQueue(glosses);
-
-    // Sequentially play gloss poses with timing delays
     glosses.forEach((token, index) => {
-      setTimeout(() => {
-        setActiveGloss(token);
-      }, index * 1200); // Hold each gesture for 1.2 seconds
+      setTimeout(() => { setActiveGloss(token); }, index * 1200);
     });
-
-    // Reset pose back to REST after queue finishes
-    setTimeout(() => {
-      setActiveGloss('REST');
-    }, glosses.length * 1200);
+    setTimeout(() => { setActiveGloss('REST'); }, glosses.length * 1200);
   };
+  /* =================== /CORE LOGIC — UNCHANGED =================== */
 
   return (
-    <div className="container">
-      <h1 className="header">Real-time Audio-to-Sign Language Translator</h1>
-      <div className="main-content">
-        <div className="controls-panel">
+    <div className="app">
+      <header className="topbar">
+        <div className="brand">
+          <span className="brand-mark">🤟</span>
+          <div>
+            <h1>Sign<span>Bridge</span></h1>
+            <p>Real-time Audio → ASL Avatar</p>
+          </div>
+        </div>
+        <span className="badge"><i className="dot" /> Live engine</span>
+      </header>
+
+      <main className="layout">
+        <section className="panel panel--controls">
           <SpeechInput onTranscript={handleTranscript} />
-          
-          <h3>Spoken Speech:</h3>
-          <div className="transcript-box">{transcript || 'Click start and speak...'}</div>
 
-          <h3>Generated ASL Gloss:</h3>
-          <div className="gloss-box">
-            {glossQueue.length > 0 ? glossQueue.join(' ➔ ') : 'Awaiting speech input...'}
+          <div className="field">
+            <div className="field-label">Spoken speech</div>
+            <div className="transcript">{transcript || 'Press the mic and speak a sentence…'}</div>
           </div>
 
-          <h3>Active Signing Gesture:</h3>
-          <div style={{ color: '#007bff', fontWeight: 'bold', fontSize: '1.2rem' }}>
-            {activeGloss || 'REST'}
+          <div className="field">
+            <div className="field-label">ASL gloss sequence</div>
+            <div className="gloss">
+              {glossQueue.length > 0
+                ? glossQueue.map((t, i) => (
+                    <span key={i} className={'chip' + (t === activeGloss ? ' chip--active' : '')}>{t}</span>
+                  ))
+                : <span className="muted">Awaiting speech input…</span>}
+            </div>
           </div>
-        </div>
 
-        <div className="avatar-panel">
-          <AvatarCanvas currentGloss={activeGloss} />
-        </div>
-      </div>
+          <div className="sign-card">
+            <span className="sign-card-label">Now signing</span>
+            <span className="token">{activeGloss || 'REST'}</span>
+          </div>
+        </section>
+
+        <section className="panel panel--stage">
+          <div className="stage"><AvatarCanvas currentGloss={activeGloss} /></div>
+          <div className="stage-hud">
+            <span><i className="dot" /> WebGL · PBR skin</span>
+            <span>React + Three.js</span>
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer">
+        <span>Web Speech API · client-side ASL gloss engine</span>
+        <span>Express backend on :5000</span>
+      </footer>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-// import SpeechInput from './components/SpeechInput';
-// import AvatarCanvas from './components/AvatarCanvas';
-// import { processSpeechToGloss } from './utils/glossEngine';
-
-// export default function App() {
-//   const [transcript, setTranscript] = useState('');
-//   const [glossQueue, setGlossQueue] = useState([]);
-//   const [activeGloss, setActiveGloss] = useState('');
-
-//   const handleTranscript = async (text) => {
-//     setTranscript(text);
-//     const glosses = await processSpeechToGloss(text);
-//     setGlossQueue(glosses);
-
-//     // Sequentially play gloss poses with timing delays
-//     glosses.forEach((token, index) => {
-//       setTimeout(() => {
-//         setActiveGloss(token);
-//       }, index * 1200); // Hold each gesture for 1.2 seconds
-//     });
-
-//     // Reset pose back to REST after queue finishes
-//     setTimeout(() => {
-//       setActiveGloss('REST');
-//     }, glosses.length * 1200);
-//   };
-
-//   return (
-//     <div className="container">
-//       <h1 className="header">Real-time Audio-to-Sign Language Translator</h1>
-//       <div className="main-content">
-//         <div className="controls-panel">
-//           <SpeechInput onTranscript={handleTranscript} />
-          
-//           <h3>Spoken Speech:</h3>
-//           <div className="transcript-box">{transcript || 'Click start and speak...'}</div>
-
-//           <h3>Generated ASL Gloss:</h3>
-//           <div className="gloss-box">
-//             {glossQueue.length > 0 ? glossQueue.join(' ➔ ') : 'Awaiting speech input...'}
-//           </div>
-
-//           <h3>Active Signing Gesture:</h3>
-//           <div style={{ color: '#007bff', fontWeight: 'bold', fontSize: '1.2rem' }}>
-//             {activeGloss || 'REST'}
-//           </div>
-//         </div>
-
-//         <div className="avatar-panel">
-//           <AvatarCanvas currentGloss={activeGloss} />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
