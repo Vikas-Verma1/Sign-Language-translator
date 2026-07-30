@@ -1,6 +1,7 @@
 // frontend/src/utils/glossEngine.js
 // Returns an ordered token stream: [{type:'gloss',value} | {type:'spell',letters} | {type:'drop'}]
 // Tries the backend first; if it is offline, translates locally (known -> gloss, unknown -> spell).
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:5000';
 
 const STOP = new Set(['A','AN','THE','IS','AM','ARE','WAS','WERE','BE','TO','OF','AND','OR','BUT','SO','IF','THAT','THIS','IT','IN','ON','AT','FOR','WITH']);
