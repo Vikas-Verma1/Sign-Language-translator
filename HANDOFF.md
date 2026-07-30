@@ -1,65 +1,72 @@
-# HANDOFF — context for AI collaborators
+# HANDOFF — SignBridge v2 (context for AI collaborators)
 
-> Read this + open the repo files. You do **not** need the user to paste code.
+Read this + open the repo. The user should NOT need to paste code.
 
-## 1. What the app does
-Spoken English → (Web Speech API) → text → `glossEngine.processSpeechToGloss` → ASL gloss
-tokens → `App` queues them and sets `activeGloss` every 1200 ms → `AvatarCanvas` maps the
-token to a pose and lerps the avatar's bones → `speechSynthesis` speaks the token.
+## What it does
+Spoken English → (Web Speech API) → `POST /api/translate` → backend returns an ordered
+token stream → frontend expands it into animation frames → `AvatarCanvas` signs each frame
+(gloss word = 1.2s pose, fingerspelled letter = 0.38s handshape, `drop` skipped) while
+`speechSynthesis` speaks each token. Head/face add non-manual markers (tilt for questions,
+shake for negation, brow/frown morphs if the model has them).
 
-## 2. Data flow & ownership
-- `SpeechInput` owns recognition; calls `onTranscript(text)`.
-- `App` owns `transcript`, `glossQueue`, `activeGloss`; owns the timing + TTS effect.
-- `glossEngine` owns English→gloss rules (client-side; backend is NOT in this path).
-- `AvatarCanvas` owns the three.js scene, model loading, bone discovery, and the lerp loop.
-  It receives `currentGloss` and selects a pose from `RPM_POSES` (fallback `FALLBACK_POSE`).
+## Translation pipeline (backend/services/translationService.js)
+1. `tokenize` the sentence. 2. Per word: `dbService.get(NORM)` (DB-first). 3. Unknown words
+   go in ONE batched LLM call (Gemini primary → Groq fallback) that returns one decision per
+   input word, same order, type ∈ {gloss, spell, drop}. 4. Each LLM decision is `dbService.set`
+   (unique key → no duplicates; persistent in backend/data/signs.json). 5. If both APIs fail,
+   unknowns are fingerspelled (not cached) → 100% coverage. 6. Emit `{tokens, provider, fromCache}`.
+   The LLM cannot output 3D angles; the DB stores the English→decision mapping (the uncertain
+   part). The 3D pose is a pure function of the token, defined in AvatarCanvas.
 
-## 3. The bone-name contract (CRITICAL)
-`AvatarCanvas.findBone()` lower-cases a bone name, strips non-alphanumerics, then checks
-`includes()` against keyword lists. A model animates **only if** its joint names contain the
-right substrings AND the model has a real **skin/skeleton** (otherwise three.js's GLTFLoader
-does not mark nodes as `isBone`, and `findBone` returns null). See `docs/AVATAR.md` for the
-full keyword table and the "why the old head-scan failed" explanation.
+## Database (backend/services/dbService.js)
+Zero-install JSON-file store + in-memory Map. Exports: init/get/set/all/count. Seeded with
+stop-words (drop) + common glosses so the app works with NO api keys. Swap to SQLite/Mongo by
+replacing ONLY this file (same exports). Uniqueness = Map key (no repeated words).
 
-## 4. INVARIANTS — DO NOT CHANGE unless the task explicitly says so
-- Backend files (`backend/**`).
-- `glossEngine.js` algorithm.
-- `App.jsx`: the `useEffect` (TTS), `handleTranscript`, the 1200 ms timings, the state shape.
-- `AvatarCanvas.jsx`: `FINGER_SHAPES`, `RPM_POSES`, `FALLBACK_POSE`, `findBone`, the
-  `detectedBones` keyword table, the interpolation `animate()` loop, the `currentGloss` effect,
-  the component's props (`{ currentGloss }`).
-- `SpeechInput.jsx`: recognition create/start/stop/onresult/onerror/onend handlers.
-Visual/markup/CSS/lighting/camera changes around these are allowed (and were done in the
-"Step 1 / Step 2" update). The boundary is marked in-code with
-`/* === CORE LOGIC — UNCHANGED === */` vs `/* === VISUAL ONLY === */`.
+## Frontend contract
+- glossEngine.processSpeechToGloss(text) → token stream (tries backend, else local offline).
+- App builds frames (buildFrames) and schedules them; passes `currentToken` ({kind,value}) +
+  `nmm` to AvatarCanvas.
+- AvatarCanvas maps: letter → ASL_ALPHABET + SPELL_ARM; gloss → RPM_POSES (else FALLBACK_POSE).
+  Non-manual markers via `nmm` prop (head bone + optional morphTargetDictionary).
 
-## 5. Current state after the Step 1 / Step 2 update
-- UI redesigned (glassmorphism, gradient brand, gloss chips that highlight the active token,
-  pulsing mic, responsive single-column under 880px, reduced-motion support).
-- Avatar scene beautified: ACES tone-mapping, RoomEnvironment PBR, 3-point lighting,
-  transparent renderer over a CSS radial gradient, **upper-body auto-framing** (works for any
-  rig; tweak `focusY` factor `0.68` and camera `z = 1.9` to re-crop).
-- Added `frontend/tools/make-avatar.mjs` (rigged mannequin generator → `public/avatar.glb`).
-- The user MUST replace the old head-scan `avatar.glb` (no rig) with a rigged model, else
-  nothing animates.
+## Wire / token shapes
+Backend: { tokens:[ {type:'gloss',value} | {type:'spell',letters:[A-Z]} | {type:'drop'} ], provider, fromCache }
+Frame (frontend): { kind:'gloss'|'letter'|'gap', value, hold }
 
-## 6. Known limitations / open work (roadmap)
-- Pose dictionary covers ~12 glosses; unknown words use `FALLBACK_POSE`. Expanding it means
-  editing `RPM_POSES` (the documented extension point — shape: `{ arm:{RightArm:[x,y,z],…}, hand: FINGER_SHAPES.X }`).
-- Only the **right** hand has finger bones driven; left hand is arm-only.
-- Pose values were authored without a real rig to validate against, so signs may look rough /
-  possibly mirror-flipped depending on the rig's facing. Mirror fix = flip camera sign (visual).
-- Backend `/api/translate` is commented out; translation is client-side. Enabling server-side
-  translation is a **backend** change (out of scope per the project rule).
-- No orbit controls wired (the HUD mentions drag as a placeholder); add `OrbitControls` if wanted
-  (visual, not core logic).
+## Config
+- `.env` at PROJECT ROOT: GEMINI_API_KEY, GROQ_API_KEY, PORT=5000 (optional GEMINI_MODEL/GROQ_MODEL).
+- Backend default port is 5000 (MUST match glossEngine API_BASE). Frontend override: VITE_API_URL.
+- avatar.glb (frontend/public) MUST be RIGGED (Mixamo/Ready-Player-Me/Xbot). A static head-scan
+  or photoreal mesh with no skeleton will load but never move (findBone needs child.isBone).
 
-## 7. Conventions
-ESM everywhere (`"type":"module"`); Vite dev server; three 0.165 (`three/examples/jsm/...`);
-CSS is plain (no preprocessor); no test suite yet.
+## Bone-name contract (AvatarCanvas.findBone keywords)
+RightArm: rightarm/armr/upperarmr/shoulderr/mixamorigrightarm · RightForeArm: rightforearm/…/mixamorigrightforearm ·
+Left*: leftarm…/leftforearm… · R fingers: righthandindex1…righthandthumb1 (and index1r/handindex1r variants) ·
+Head (NMM): mixamorighead/head. Mixamo rigs match after lowercasing + stripping non-alnum.
 
-## 8. Session changelog (what the last update touched)
-Changed: `AvatarCanvas.jsx` (visual/integration), `App.jsx` (markup), `SpeechInput.jsx`
-(markup + additive `supported`), `styles.css` (rewrite), `index.html` (fonts/meta).
-Added: `frontend/tools/make-avatar.mjs`, `README.md`, `docs/HANDOFF.md`, `docs/AVATAR.md`.
-Untouched: `backend/**`, `glossEngine.js`, `main.jsx`.
+## Extension points
+- New word sign: add to RPM_POSES {arm:{RightArm:[x,y,z],…}, hand:FINGER_SHAPES.X} (Euler rad, lerped 0.1/frame).
+- Better alphabet: replace ASL_ALPHABET values with WLASL/HamNoSys-derived bends.
+- Real 3D-from-DB: add a `pose` field to dbService decisions + a loader in AvatarCanvas (schema-ready).
+- Facial blendshapes: already wired (browInnerUp/browOuterUp/mouthFrown*); just needs a model that has them.
+
+## Invariants the user may re-impose
+Earlier the user said "don't touch backend / core logic". In v2 they EXPLICITLY asked to modify
+backend + glossEngine + App + AvatarCanvas, so those are now in scope. If a future task says
+"don't touch logic" again, treat the pose dicts, findBone, the lerp loop, the DB-first algorithm
+and the recognition handlers as off-limits; visual/markup/CSS/lighting/camera remain free.
+
+## Known limits / roadmap
+- RPM_POSES covers ~15 glosses; everything else signs via FALLBACK_POSE or fingerspelling.
+- Only the RIGHT hand is fingerspelled (left is arm-only).
+- ASL_ALPHABET handshapes are approximations, not motion-capture.
+- No ASL grammatical reordering (gloss follows English order minus drops) — consistent with the
+  original design; the LLM is used per-word with full-sentence context, not for reordering.
+- WLASL / HamNoSys integration is the planned path for data-driven poses (not implemented).
+
+## Session changelog (v2)
+Replaced: translationService.js, server.js, glossEngine.js, App.jsx, AvatarCanvas.jsx, HANDOFF.md.
+New: dbService.js, .env.example, backend/data/signs.json (runtime). Untouched: SpeechInput.jsx,
+main.jsx, index.html, styles.css, both package.json. Fixed bugs: port 3000→5000 mismatch,
+response-shape mismatch (data.gloss undefined), missing-DB, missing-filename risk.
