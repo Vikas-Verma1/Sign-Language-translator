@@ -681,5 +681,100 @@
       "source": "llm",
       "savedAt": "2026-07-30T10:15:26.336Z"
     }
+  ],
+  [
+    "MYSELF",
+    {
+      "type": "gloss",
+      "value": "MYSELF",
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.905Z"
+    }
+  ],
+  [
+    "THESE",
+    {
+      "type": "gloss",
+      "value": "THESE",
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.907Z"
+    }
+  ],
+  [
+    "FRIENDS",
+    {
+      "type": "gloss",
+      "value": "FRIENDS",
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.910Z"
+    }
+  ],
+  [
+    "CARD",
+    {
+      "type": "gloss",
+      "value": "CARD",
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.911Z"
+    }
+  ],
+  [
+    "KE",
+    {
+      "type": "gloss",
+      "value": "KE",
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.911Z"
+    }
+  ],
+  [
+    "PANDEY",
+    {
+      "type": "spell",
+      "letters": [
+        "P",
+        "A",
+        "N",
+        "D",
+        "E",
+        "Y"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.914Z"
+    }
+  ],
+  [
+    "RAJKISHOR",
+    {
+      "type": "spell",
+      "letters": [
+        "R",
+        "A",
+        "J",
+        "K",
+        "I",
+        "S",
+        "H",
+        "O",
+        "R"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.915Z"
+    }
+  ],
+  [
+    "YADAV",
+    {
+      "type": "spell",
+      "letters": [
+        "Y",
+        "A",
+        "D",
+        "A",
+        "V"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T10:56:04.917Z"
+    }
   ]
 ]
