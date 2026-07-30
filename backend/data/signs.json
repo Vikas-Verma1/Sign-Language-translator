@@ -1,0 +1,685 @@
+[
+  [
+    "A",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "AN",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "THE",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "IS",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "AM",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "ARE",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "WAS",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "WERE",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "BE",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "BEEN",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "BEING",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "TO",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "OF",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "AND",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "OR",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "BUT",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "SO",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "IF",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "THAT",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "THIS",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "IT",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "ITS",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "IN",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "ON",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "AT",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "FOR",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "WITH",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "DO",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "DOES",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "DID",
+    {
+      "type": "drop",
+      "source": "seed"
+    }
+  ],
+  [
+    "HELLO",
+    {
+      "type": "gloss",
+      "value": "HELLO",
+      "source": "seed"
+    }
+  ],
+  [
+    "HI",
+    {
+      "type": "gloss",
+      "value": "HELLO",
+      "source": "seed"
+    }
+  ],
+  [
+    "HEY",
+    {
+      "type": "gloss",
+      "value": "HELLO",
+      "source": "seed"
+    }
+  ],
+  [
+    "YOU",
+    {
+      "type": "gloss",
+      "value": "YOU",
+      "source": "seed"
+    }
+  ],
+  [
+    "YOUR",
+    {
+      "type": "gloss",
+      "value": "YOUR",
+      "source": "seed"
+    }
+  ],
+  [
+    "YOURS",
+    {
+      "type": "gloss",
+      "value": "YOUR",
+      "source": "seed"
+    }
+  ],
+  [
+    "ME",
+    {
+      "type": "gloss",
+      "value": "ME",
+      "source": "seed"
+    }
+  ],
+  [
+    "MY",
+    {
+      "type": "gloss",
+      "value": "MY",
+      "source": "seed"
+    }
+  ],
+  [
+    "MINE",
+    {
+      "type": "gloss",
+      "value": "MY",
+      "source": "seed"
+    }
+  ],
+  [
+    "NAME",
+    {
+      "type": "gloss",
+      "value": "NAME",
+      "source": "seed"
+    }
+  ],
+  [
+    "THANKS",
+    {
+      "type": "gloss",
+      "value": "THANKS",
+      "source": "seed"
+    }
+  ],
+  [
+    "THANK",
+    {
+      "type": "gloss",
+      "value": "THANKS",
+      "source": "seed"
+    }
+  ],
+  [
+    "PLEASE",
+    {
+      "type": "gloss",
+      "value": "PLEASE",
+      "source": "seed"
+    }
+  ],
+  [
+    "YES",
+    {
+      "type": "gloss",
+      "value": "YES",
+      "source": "seed"
+    }
+  ],
+  [
+    "YEAH",
+    {
+      "type": "gloss",
+      "value": "YES",
+      "source": "seed"
+    }
+  ],
+  [
+    "NO",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "NOPE",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "WHAT",
+    {
+      "type": "gloss",
+      "value": "WHAT",
+      "source": "seed"
+    }
+  ],
+  [
+    "WHERE",
+    {
+      "type": "gloss",
+      "value": "WHERE",
+      "source": "seed"
+    }
+  ],
+  [
+    "WHO",
+    {
+      "type": "gloss",
+      "value": "WHO",
+      "source": "seed"
+    }
+  ],
+  [
+    "WHY",
+    {
+      "type": "gloss",
+      "value": "WHY",
+      "source": "seed"
+    }
+  ],
+  [
+    "HOW",
+    {
+      "type": "gloss",
+      "value": "HOW",
+      "source": "seed"
+    }
+  ],
+  [
+    "WHEN",
+    {
+      "type": "gloss",
+      "value": "WHEN",
+      "source": "seed"
+    }
+  ],
+  [
+    "LIKE",
+    {
+      "type": "gloss",
+      "value": "LIKE",
+      "source": "seed"
+    }
+  ],
+  [
+    "LOVE",
+    {
+      "type": "gloss",
+      "value": "LIKE",
+      "source": "seed"
+    }
+  ],
+  [
+    "HELP",
+    {
+      "type": "gloss",
+      "value": "PLEASE",
+      "source": "seed"
+    }
+  ],
+  [
+    "SORRY",
+    {
+      "type": "gloss",
+      "value": "PLEASE",
+      "source": "seed"
+    }
+  ],
+  [
+    "GOOD",
+    {
+      "type": "gloss",
+      "value": "YES",
+      "source": "seed"
+    }
+  ],
+  [
+    "BAD",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "FRIEND",
+    {
+      "type": "gloss",
+      "value": "NAME",
+      "source": "seed"
+    }
+  ],
+  [
+    "WANT",
+    {
+      "type": "gloss",
+      "value": "PLEASE",
+      "source": "seed"
+    }
+  ],
+  [
+    "NEED",
+    {
+      "type": "gloss",
+      "value": "PLEASE",
+      "source": "seed"
+    }
+  ],
+  [
+    "DONT",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "CANT",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "WONT",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "NOT",
+    {
+      "type": "gloss",
+      "value": "NO",
+      "source": "seed"
+    }
+  ],
+  [
+    "SIR",
+    {
+      "type": "gloss",
+      "value": "SIR",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:07.690Z"
+    }
+  ],
+  [
+    "OLD",
+    {
+      "type": "gloss",
+      "value": "OLD",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:16.611Z"
+    }
+  ],
+  [
+    "MAN",
+    {
+      "type": "gloss",
+      "value": "MAN",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:16.612Z"
+    }
+  ],
+  [
+    "PRESIDENT",
+    {
+      "type": "gloss",
+      "value": "PRESIDENT",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:25.590Z"
+    }
+  ],
+  [
+    "INDIA",
+    {
+      "type": "spell",
+      "letters": [
+        "I",
+        "N",
+        "D",
+        "I",
+        "A"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:25.591Z"
+    }
+  ],
+  [
+    "ABOUT",
+    {
+      "type": "gloss",
+      "value": "ABOUT",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:25.593Z"
+    }
+  ],
+  [
+    "SURNAME",
+    {
+      "type": "gloss",
+      "value": "SURNAME",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:19:25.594Z"
+    }
+  ],
+  [
+    "VIKAS",
+    {
+      "type": "spell",
+      "letters": [
+        "V",
+        "I",
+        "K",
+        "A",
+        "S"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T09:32:51.940Z"
+    }
+  ],
+  [
+    "VERMA",
+    {
+      "type": "spell",
+      "letters": [
+        "V",
+        "E",
+        "R",
+        "M",
+        "A"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T09:32:51.943Z"
+    }
+  ],
+  [
+    "FUCK",
+    {
+      "type": "gloss",
+      "value": "FUCK",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:39:20.371Z"
+    }
+  ],
+  [
+    "WHATS",
+    {
+      "type": "gloss",
+      "value": "WHATS",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:42:55.067Z"
+    }
+  ],
+  [
+    "FEELING",
+    {
+      "type": "gloss",
+      "value": "FEELING",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:43:53.438Z"
+    }
+  ],
+  [
+    "WELL",
+    {
+      "type": "gloss",
+      "value": "WELL",
+      "source": "llm",
+      "savedAt": "2026-07-30T09:43:53.444Z"
+    }
+  ],
+  [
+    "SHARMA",
+    {
+      "type": "spell",
+      "letters": [
+        "S",
+        "H",
+        "A",
+        "R",
+        "M",
+        "A"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T09:44:33.442Z"
+    }
+  ],
+  [
+    "GOOGLE",
+    {
+      "type": "spell",
+      "letters": [
+        "G",
+        "O",
+        "O",
+        "G",
+        "L",
+        "E"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T10:08:44.995Z"
+    }
+  ],
+  [
+    "DRAUPADI",
+    {
+      "type": "spell",
+      "letters": [
+        "D",
+        "R",
+        "A",
+        "U",
+        "P",
+        "A",
+        "D",
+        "I"
+      ],
+      "source": "llm",
+      "savedAt": "2026-07-30T10:15:26.336Z"
+    }
+  ]
+]

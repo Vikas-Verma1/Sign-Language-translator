@@ -1,35 +1,51 @@
-// Target bone rotation targets for specific sign poses
-export const POSE_DICTIONARY = {
-  REST: { leftArm: [0, 0, 0], rightArm: [0, 0, 0] },
-  HELLO: { leftArm: [0, 0, 0], rightArm: [0, 0, 1.2] },  // Right hand raised waving
-  YOU: { leftArm: [0, 0, 0], rightArm: [0.8, 0, 0.2] },   // Pointing forward
-  ME: { leftArm: [0, 0, 0], rightArm: [0.4, 0, -0.4] },   // Pointing to chest
-  THANKS: { leftArm: [0, 0, 0], rightArm: [1.1, 0, 0.1] },// Fingers from chin out
-};
+// frontend/src/utils/glossEngine.js
+// Returns an ordered token stream: [{type:'gloss',value} | {type:'spell',letters} | {type:'drop'}]
+// Tries the backend first; if it is offline, translates locally (known -> gloss, unknown -> spell).
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:5000';
 
-// Filters out spoken English stop words that don't exist in sign language
-export function filterEnglishStopWords(text) {
-  const stopWords = new Set(['is', 'am', 'are', 'was', 'were', 'the', 'a', 'an']);
+const STOP = new Set(['A','AN','THE','IS','AM','ARE','WAS','WERE','BE','TO','OF','AND','OR','BUT','SO','IF','THAT','THIS','IT','IN','ON','AT','FOR','WITH']);
+const LOCAL = { HELLO:'HELLO', HI:'HELLO', YOU:'YOU', YOUR:'YOUR', ME:'ME', MY:'MY', NAME:'NAME',
+  THANKS:'THANKS', THANK:'THANKS', PLEASE:'PLEASE', YES:'YES', NO:'NO', WHAT:'WHAT', WHERE:'WHERE',
+  LIKE:'LIKE', LOVE:'LIKE', HELP:'PLEASE', SORRY:'PLEASE', GOOD:'YES', BAD:'NO', FRIEND:'NAME', WANT:'PLEASE', NEED:'PLEASE' };
 
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s]/g, '') // Remove punctuation
-    .split(' ')
-    .filter(word => word.trim().length > 0 && !stopWords.has(word)) // Filter out stop words
-    .map(word => word.toUpperCase());
+const norm = (w) => String(w).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+const tokenize = (t) => String(t).toLowerCase().replace(/[^a-z0-9\s']/g, ' ').replace(/'/g, '').split(/\s+/).filter(Boolean);
+
+function offlineTokens(text) {
+  return tokenize(text).map((w) => {
+    const n = norm(w);
+    if (!n) return { type: 'drop' };
+    if (STOP.has(n)) return { type: 'drop' };
+    if (LOCAL[n]) return { type: 'gloss', value: LOCAL[n] };
+    return { type: 'spell', letters: n.split('') }; // unknown -> fingerspell (always works)
+  });
+}
+
+// Tolerate the OLD backend shape {gloss, unknownWords} just in case.
+function legacyToTokens(data) {
+  const d = data?.data || data || {};
+  const unknown = new Set((d.unknownWords || []).map(norm));
+  const out = [];
+  if (typeof d.gloss === 'string') for (const w of d.gloss.split(/\s+/)) { const n = norm(w); if (n) out.push({ type: 'gloss', value: n }); }
+  for (const u of unknown) if (u) out.push({ type: 'spell', letters: u.split('') });
+  return out.length ? out : offlineTokens(d.gloss || '');
 }
 
 export async function processSpeechToGloss(transcript) {
   try {
-    const res = await fetch('http://localhost:5000/api/translate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: transcript })
+    const res = await fetch(`${API_BASE}/api/translate`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: transcript }),
     });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    return data.gloss;
+    if (data && Array.isArray(data.tokens)) return data.tokens; // new shape
+    return legacyToTokens(data);
   } catch (err) {
-    // Fallback logic when backend is offline: clean up the text using stop words filter
-    return filterEnglishStopWords(transcript);
+    console.warn('[glossEngine] backend offline → local mode:', err.message);
+    return offlineTokens(transcript);
   }
 }
+
+// Legacy exports kept so nothing else breaks.
+export const POSE_DICTIONARY = {};
+export const filterEnglishStopWords = (text) => tokenize(text).filter((w) => !STOP.has(norm(w))).map(norm);
